@@ -37,10 +37,18 @@
                     <span class="navbar-toggler-icon"></span>
                   </button>
                   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav">
+                    <div class="navbar-nav" id="defaultMenu">
                       <a class="nav-link" id="belepesNL" onclick="Render('login')">Belépés</a>
                       <a class="nav-link" id="regisztracioNL" onclick="Render('registration')">Regisztráció</a>
                     </div>
+                    <div class="navbar-nav hide" id="loggedMenu">
+                      <a class="nav-link" id="belepesNL" onclick="Render('stepdata')">Lépésadatok kezelése</a>
+                      <a class="nav-link" id="regisztracioNL" onclick="Render('statistics')">Statisztikák</a>
+                      <a class="nav-link" id="regisztracioNL" onclick="logout()">Kilépés</a>
+                      <a class="nav-link" id="regisztracioNL" onclick="Render('profile')">Profilom</a>
+
+                    </div>
+
                   </div>
                 </div>
 
@@ -58,8 +66,9 @@
     
 
     <!--Scripts-->
-    <script src="controllers/usercontroller.js"></script>
     <script src="assets/JS/bootstrap.min.js"></script>
     <script src="assets/JS/app.js"></script>
+    <script src="controllers/usercontroller.js"></script>
+    <script src="assets/JS/messagecontroller.js"></script>
 </body>
 </html>

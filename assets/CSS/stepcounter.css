@@ -1,3 +1,4 @@
+
 header{
     text-align: center;
     padding: 40px 0px;
@@ -35,3 +36,17 @@ footer{
     cursor: pointer;
 }
 
+#msgBox {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+}
+
+#defaultMenu{display: block;}
+/*#loggedMenu{display: none;}*/
+
+
+
+#belepesNL, #regisztracioNL{
+    background-color: rgba(0, 102, 255, 0.438);
+}

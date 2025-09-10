@@ -4,8 +4,10 @@
 let userpasswordAgain = document.querySelector('#floatingPasswordAgain')
 //let belepBTN = document.getElementById('belepesBTN')
 let regBTN = document.getElementById('regBTN')
-//const passwdRegExp = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$';
+//const passwdRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 const regexMail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const serverURL = 'http://localhost:3000'
+let loggedUser = false
 
 
 
@@ -21,24 +23,24 @@ async function registration() {
 
 
     if (!username.value || !useremail.value || !userpassword.value) {
-        alert('Kitöltetlen adatok!')
+        ShowMessages('danger', 'Hiba', 'Kitöltetlen adatok')
         return
     }
     else if (!regexMail.test(useremail.value)) {
-        alert('Helytelen e-mail cím!')
+        ShowMessages('danger', 'Hiba', 'Hibás e-mail')
         return
     }
 
-//    else if (!passwdRegExp.test(userpassword.value)) 
-//    {
-//        //alert('Helytelen jelszó!')
-//       return
-//   }
+    //else if (!passwdRegExp.test(userpassword.value)) 
+    //{
+        //ShowMessages('danger', 'Hiba', 'Nem megfelelő jelszó!')
+      //return
+    //}
     
     else
     {
         try {
-            const res = await fetch('http://localhost:3000/users', {
+            const res = await fetch(`${serverURL}/users`, {
                 method: 'POST',
                 headers: 
                 {
@@ -58,7 +60,11 @@ async function registration() {
                 username.value = ''
                 useremail.value = ''
                 userpassword.value = ''
-                confirm("Sikeres regisztráció!")
+                ShowMessages('success', '', 'Sikeres regisztráció!')
+
+            }
+            else{
+                ShowMessages('danger', 'Hiba', 'Szerverhiba!')
             }
 
         } catch (err) {
@@ -72,38 +78,65 @@ async function registration() {
 }
 
 
-async function logIn() {
-    let useremail = document.querySelector('loginName')
-    let userpassword = document.querySelector('loginPassword')
-
-}
+async function login() {
+    let useremail = document.querySelector('#loginName')
+    let userpassword = document.querySelector('#loginPassword')
 
 
-let users = []
-
-
-
-function saveUser() {
-    if (userpasswordAgain != userpassword) {
-        alert('Helytelen adatok')
+    if (!useremail.value || !userpassword.value) {
+        ShowMessages('danger', 'Hiba', 'Kitöltetlen adatok')
+        return
+    }
+    else if (!regexMail.test(useremail.value)) {
+        ShowMessages('danger', 'Hiba', 'Hibás e-mail')
         return
     }
 
-    let user = {
-        name: username,
-        email: useremail,
-        password: userpassword
+    try {
+        const res = await fetch(`${serverURL}/users/login`, {
+            method: "POST",
+            headers: 
+            {
+                'Content-Type': 'application/json'
+            }, 
+            body: JSON.stringify({
+                email: useremail.value,
+                password: userpassword.value
+            })
+        })
+
+        user = await res.json()
+
+        if (user != null) {
+            loggedUser = user
+        }
+
+        if (loggedUser.email == useremail.value && loggedUser.password == userpassword.value && res.status == 200) {
+            ShowMessages('success', '', 'Sikeres bejelentkezés!')
+            getloggedUser()
+            return
+        }
+        
+        ShowMessages('warning', 'Hiba', 'Sikertelen bejelentkezés!')
+
+        
+
+    } catch (err) {
+        ShowMessages('danger', 'Sikertelen bejelentkezés', `${err}`)
+
     }
-
-    users.push(user)
-
-    localStorage.setItem('userList', users)
 }
 
 
-function logOut(params) {
-    
+
+
+
+function logout() {
+    sessionStorage.removeItem('loggedUser')
+    getloggedUser()
+    Render('logout')
 }
+
 
 function logIn(params) {
     
@@ -117,6 +150,11 @@ function dataChange(params) {
     
 }
 
-
+if (getloggedUser()) {
+    Render('main')
+}
+else{
+    Render('login')
+}
 
 

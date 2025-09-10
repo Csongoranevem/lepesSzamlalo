@@ -3,6 +3,9 @@ let theme = 'light'
 const appTitle = "Lépésszámláló App"
 const author = "13.A Szoft"
 const company = "Bajai SZC Türr István Technikum"
+let defaultMenu = document.getElementById('defaultMenu')
+let loggedMenu = document.getElementById('loggedMenu')
+
 
 appTitleLBL = document.querySelector('footer h6')
 appTitleLBL.textContent = company
@@ -75,6 +78,27 @@ async function Render(view) {
     main.innerHTML = await (await fetch(`views/${view}.html`)).text()
 }
 
+
+function getloggedUser() {
+    if (!sessionStorage.getItem('loggedUser')) {
+        loggedUser = JSON.parse(sessionStorage.getItem('loggedUser'))
+        defaultMenu.classList.add('hide')
+        loggedMenu.classList.remove('hide')
+
+
+        defaultMenu.style.display = 'none'
+        loggedMenu.style.display = 'block'
+
+    }
+    else{
+        loggedUser = null
+        defaultMenu.classList.remove('hide')
+        loggedMenu.classList.add('hide')
+
+        defaultMenu.style.display = 'block'
+        loggedMenu.style.display = 'none'
+    }
+}
 
 LoadTheme()
 Render('login')
