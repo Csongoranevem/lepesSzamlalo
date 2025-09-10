@@ -1,0 +1,37 @@
+header{
+    text-align: center;
+    padding: 40px 0px;
+}
+
+footer p{
+    font-size: 85%;
+    letter-spacing: 3px;
+    color: aliceblue;
+    background-color: rgba(0, 102, 255, 0.438);
+    border-radius: 15px;
+    margin: 5px;
+    padding: 5px;
+    width: fit-content;
+
+    
+}
+
+footer{
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--bs-secondary);
+    align-items: center;
+}
+
+
+#colorModeDark, #colorModeLight{
+    margin-left: 10px;
+    position: relative;
+    top: 10px;
+    right: 10px;
+}
+
+.navbar-nav a{
+    cursor: pointer;
+}
+
