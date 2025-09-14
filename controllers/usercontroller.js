@@ -4,7 +4,7 @@
 let userpasswordAgain = document.querySelector('#floatingPasswordAgain')
 //let belepBTN = document.getElementById('belepesBTN')
 let regBTN = document.getElementById('regBTN')
-//const passwdRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+const passwdRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 const regexMail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const serverURL = 'http://localhost:3000'
 let loggedUser;
@@ -35,6 +35,10 @@ async function registration() {
     }
     else if (!regexMail.test(useremail.value)) {
         ShowMessages('danger', 'Hiba', 'Hibás e-mail')
+        return
+    }
+    else if (!passwdRegExp.test(userpassword.value)) {
+        ShowMessages('danger', 'Hiba', 'A jelszónak legalább 8 karakter hosszúnak kell lennie, tartalmaznia kell legalább egy nagybetűt, egy kisbetűt és egy számot.')
         return
     }
     
@@ -199,6 +203,10 @@ async function UpdateProfile() {
         }
         else if (!regexMail.test(profileUserEmail.value)) {
             ShowMessages('danger', 'Hiba', 'Hibás e-mail')
+            return
+        }
+        else if (!passwdRegExp.test(profileUserPassword.value)) {
+            ShowMessages('danger', 'Hiba', 'A jelszónak legalább 8 karakter hosszúnak kell lennie, tartalmaznia kell legalább egy nagybetűt, egy kisbetűt és egy számot.')
             return
         }
         else if (profileOldPassword.value != loggedUser.password) {
