@@ -45,8 +45,30 @@ footer{
 #defaultMenu{display: block;}
 /*#loggedMenu{display: none;}*/
 
-
-
-#belepesNL, #regisztracioNL{
-    background-color: rgba(0, 102, 255, 0.438);
+#profilePasswordField, #profileEmailField, #profileNameField{
+    border: none;
+    background-color: transparent;
+    color: white;
+    font-size: 1.2rem;
+    width: fit-content;
+    height: fit-content;
 }
+#profilePasswordField:focus, #profileEmailField:focus, #profileNameField:focus{
+    outline: none;
+    border-bottom: 1px solid white;
+}
+
+
+.changeBTN{
+    display: inline;
+    color: rgb(223, 223, 223);
+    width: fit-content;
+    height: fit-content;
+    transition: 0.3s;
+}
+
+.chanfeBTN:hover{
+    color: white;
+    cursor: pointer;
+    
+} 

@@ -6,6 +6,43 @@
     <title>Profilom</title>
 </head>
 <body>
-    lkjchdrskvhdr
+      <div id="msgBox">
+     </div>
+
+        <div class="card mb-4 mt-2">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Full Name</p>
+              </div>
+              <div class="col-sm-9">
+                <input class="d-inline text-muted mb-0" id="profileNameField" readonly></input>
+                <button class="d-inline btn btn-secondary changeBTN" onclick="ChangeData('Name')">Change</button>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Email</p>
+              </div>
+              <div class="col-sm-9">
+                <input class="d-inline text-muted mb-0" id="profileEmailField" readonly></input>
+                <button class="d-inline btn btn-secondary changeBTN" onclick="ChangeData('Email')">Change</button>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Password</p>
+              </div>
+              <div class="col-sm-9">
+                <input class="d-inline text-muted mb-0" id="profilePasswordField" readonly></input>
+                <!--<button class="d-inline btn btn-secondary changeBTN" onclick="ChangeData('Password')">Change</button>-->
+              </div>
+            </div>
+            <hr>
+            <button class="btn btn-primary d-none" id="saveProfileBTN" onclick="UpdateProfile()">Save</button>
+          </div>
+        </div>
 </body>
 </html>

@@ -76,29 +76,29 @@ function SetThemeBTN() {
 
 async function Render(view) {
     main.innerHTML = await (await fetch(`views/${view}.html`)).text()
+
+    if (view == 'profile') {
+        ProfileDataFill();
+    }
 }
 
 
 function getloggedUser() {
-    if (!sessionStorage.getItem('loggedUser')) {
-        loggedUser = JSON.parse(sessionStorage.getItem('loggedUser'))
-        defaultMenu.classList.add('hide')
-        loggedMenu.classList.remove('hide')
+    loggedUser = JSON.parse(sessionStorage.getItem('loggedUser'))
 
-
-        defaultMenu.style.display = 'none'
-        loggedMenu.style.display = 'block'
-
-    }
-    else{
-        loggedUser = null
-        defaultMenu.classList.remove('hide')
-        loggedMenu.classList.add('hide')
-
-        defaultMenu.style.display = 'block'
-        loggedMenu.style.display = 'none'
+    if (!loggedUser) {
+        // nincs bejelentkezve
+        defaultMenu?.classList.remove('d-none')
+        loggedMenu?.classList.add('d-none')
+        return false
+    } else {
+        // bejelentkezve
+        defaultMenu?.classList.add('d-none')
+        loggedMenu?.classList.remove('d-none')
+        return true
     }
 }
+
 
 LoadTheme()
 Render('login')

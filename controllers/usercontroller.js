@@ -7,15 +7,22 @@ let regBTN = document.getElementById('regBTN')
 //const passwdRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 const regexMail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const serverURL = 'http://localhost:3000'
-let loggedUser = false
+let loggedUser;
+
+
+if (!sessionStorage.getItem('loggedUser')) {
+    loggedUser = null
+    sessionStorage.setItem('loggedUser', JSON.stringify(loggedUser))
+} else {
+    loggedUser = JSON.parse(sessionStorage.getItem('loggedUser'))
+}
+
 
 
 
 
 
 async function registration() {
-    //await fetch('http://localhost:3000/users')
-    //.then(res => {res.json().then(data => console.log(data))})
 
     let username = document.querySelector('#floatingName')
     let useremail = document.querySelector('#floatingInput')
@@ -30,17 +37,11 @@ async function registration() {
         ShowMessages('danger', 'Hiba', 'Hibás e-mail')
         return
     }
-
-    //else if (!passwdRegExp.test(userpassword.value)) 
-    //{
-        //ShowMessages('danger', 'Hiba', 'Nem megfelelő jelszó!')
-      //return
-    //}
     
     else
     {
         try {
-            const res = await fetch(`${serverURL}/users`, {
+            const res = await fetch(`${serverURL}/users/registration`, {
                 method: 'POST',
                 headers: 
                 {
@@ -76,7 +77,7 @@ async function registration() {
     }
    
 }
-
+// Bejelentkezés
 
 async function login() {
     let useremail = document.querySelector('#loginName')
@@ -111,11 +112,13 @@ async function login() {
             loggedUser = user
         }
 
-        if (loggedUser.email == useremail.value && loggedUser.password == userpassword.value && res.status == 200) {
+        if (loggedUser.email == useremail.value && res.status == 200) {
             ShowMessages('success', '', 'Sikeres bejelentkezés!')
+            sessionStorage.setItem('loggedUser', JSON.stringify(loggedUser))
             getloggedUser()
             return
-        }
+}
+
         
         ShowMessages('warning', 'Hiba', 'Sikertelen bejelentkezés!')
 
@@ -129,7 +132,7 @@ async function login() {
 
 
 
-
+// Kijelentkezés
 
 function logout() {
     sessionStorage.removeItem('loggedUser')
@@ -138,9 +141,6 @@ function logout() {
 }
 
 
-function logIn(params) {
-    
-}
 
 function userDelete(params) {
     
@@ -157,4 +157,84 @@ else{
     Render('login')
 }
 
+// Profil adatok betöltése a profil nézetben
 
+function ProfileDataFill() {
+    loggedUser = JSON.parse(sessionStorage.getItem('loggedUser'))
+
+    if (!loggedUser) {
+        return ShowMessages('danger', 'Hiba', 'Nincs bejelentkezve felhasználó')
+    }
+
+    document.getElementById('profileNameField').value = loggedUser.name
+    document.getElementById('profileEmailField').value = loggedUser.email
+    document.getElementById('profilePasswordField').value = loggedUser.password.replace(/./g, '*')
+}
+
+function ChangeData(element) {
+
+    document.getElementById('saveProfileBTN').classList.remove('d-none')
+    dataToChange = document.getElementById(`profile${element}Field`)
+    dataToChange.removeAttribute('readonly')
+    dataToChange.classList.remove('bg-light')
+    dataToChange.classList.add('bg-black')
+    dataToChange.classList.add('fg-white')
+}
+
+async function UpdateProfile() {
+    try {
+
+        let profileUserEmail = document.querySelector('#profileEmailField')
+        let profileUserName = document.querySelector('#profileNameField')
+
+        if (profileUserEmail.value.trim() == '' || profileUserName.value.trim() == '') {
+            ShowMessages('danger', 'Hiba', 'Kitöltetlen adatok')
+            return
+        }
+        else if (!regexMail.test(profileUserEmail.value)) {
+            ShowMessages('danger', 'Hiba', 'Hibás e-mail')
+            return
+        }
+
+
+
+       const res = await fetch(`${serverURL}/users/${loggedUser.id}`, {
+        method: "PATCH",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            name: document.getElementById('profileNameField').value,
+            email: document.getElementById('profileEmailField').value,
+            password: loggedUser.password 
+    })
+})
+
+
+        if (res.status == 200) {
+            ShowMessages('success', '', 'Sikeres adatfrissítés!')
+            loggedUser.name = document.getElementById('profileNameField').value
+            loggedUser.email = document.getElementById('profileEmailField').value
+            sessionStorage.setItem('loggedUser', JSON.stringify(loggedUser))
+            document.getElementById('profileNameField').setAttribute('readonly', true)
+            document.getElementById('profileEmailField').setAttribute('readonly', true)
+
+
+
+            document.getElementById('profileNameField').classList.remove('bg-black')
+            document.getElementById('profileEmailField').classList.remove('bg-black')
+
+            document.getElementById('profileNameField').classList.add('bg-dark')
+            document.getElementById('profileEmailField').classList.add('bg-dark')
+
+
+            document.getElementById('saveProfileBTN').classList.add('d-none')
+            doc
+
+
+            ProfileDataFill()
+
+            return
+        }
+    } catch (error) {
+        
+    }
+}

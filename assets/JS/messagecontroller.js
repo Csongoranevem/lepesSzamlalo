@@ -1,6 +1,7 @@
 function ShowMessages(severity, title, message) {
     let msgBox = document.getElementById('msgBox')
     msgBox.innerHTML = ''
+    msgBox.className = ''
     let h3 = document.createElement('h3')
     let p = document.createElement('p')
     let btn = document.createElement('button')
@@ -19,7 +20,9 @@ function ShowMessages(severity, title, message) {
 
     setTimeout(() => {
         msgBox.classList.remove('show')
-        msgBox.classList.add('hide')
+        msgBox.classList.add('d-none')
 
     }, 3000);
 }
+
+
