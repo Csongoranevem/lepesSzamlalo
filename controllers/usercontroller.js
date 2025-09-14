@@ -168,13 +168,17 @@ function ProfileDataFill() {
 
     document.getElementById('profileNameField').value = loggedUser.name
     document.getElementById('profileEmailField').value = loggedUser.email
-    document.getElementById('profilePasswordField').value = loggedUser.password.replace(/./g, '*')
+    document.getElementById('profilePasswordField').value = loggedUser.password
 }
 
 function ChangeData(element) {
 
     document.getElementById('saveProfileBTN').classList.remove('d-none')
     dataToChange = document.getElementById(`profile${element}Field`)
+    if (dataToChange.id == 'profilePasswordField') {
+        document.getElementById('profileOldPasswordField').classList.remove('d-none')
+        document.getElementById('profileOldPasswordField').setAttribute('required', true)
+    }
     dataToChange.removeAttribute('readonly')
     dataToChange.classList.remove('bg-light')
     dataToChange.classList.add('bg-black')
@@ -186,13 +190,19 @@ async function UpdateProfile() {
 
         let profileUserEmail = document.querySelector('#profileEmailField')
         let profileUserName = document.querySelector('#profileNameField')
+        let profileUserPassword = document.querySelector('#profilePasswordField')
+        let profileOldPassword = document.querySelector('#profileOldPasswordField')
 
-        if (profileUserEmail.value.trim() == '' || profileUserName.value.trim() == '') {
+        if (profileUserEmail.value.trim() == '' || profileUserName.value.trim() == '' || profileUserPassword.value.trim() == '' || profileOldPassword.value.trim() == '') {
             ShowMessages('danger', 'Hiba', 'Kitöltetlen adatok')
             return
         }
         else if (!regexMail.test(profileUserEmail.value)) {
             ShowMessages('danger', 'Hiba', 'Hibás e-mail')
+            return
+        }
+        else if (profileOldPassword.value != loggedUser.password) {
+            ShowMessages('danger', 'Hiba', 'Hibás jelszó')
             return
         }
 
@@ -204,7 +214,7 @@ async function UpdateProfile() {
         body: JSON.stringify({
             name: document.getElementById('profileNameField').value,
             email: document.getElementById('profileEmailField').value,
-            password: loggedUser.password 
+            password: document.getElementById('profilePasswordField').value
     })
 })
 
@@ -213,22 +223,30 @@ async function UpdateProfile() {
             ShowMessages('success', '', 'Sikeres adatfrissítés!')
             loggedUser.name = document.getElementById('profileNameField').value
             loggedUser.email = document.getElementById('profileEmailField').value
+            loggedUser.password = document.getElementById('profilePasswordField').value
             sessionStorage.setItem('loggedUser', JSON.stringify(loggedUser))
             document.getElementById('profileNameField').setAttribute('readonly', true)
             document.getElementById('profileEmailField').setAttribute('readonly', true)
+            document.getElementById('profilePasswordField').setAttribute('readonly', true)
+
+            document.getElementById('profileOldPasswordField').classList.add('d-none')
+            document.getElementById('profileOldPasswordField').value = ''
 
 
 
             document.getElementById('profileNameField').classList.remove('bg-black')
             document.getElementById('profileEmailField').classList.remove('bg-black')
+            document.getElementById('profilePasswordField').classList.remove('bg-black')
 
             document.getElementById('profileNameField').classList.add('bg-dark')
             document.getElementById('profileEmailField').classList.add('bg-dark')
+            document.getElementById('profilePasswordField').classList.add('bg-dark')
 
 
             document.getElementById('saveProfileBTN').classList.add('d-none')
             doc
 
+            
 
             ProfileDataFill()
 
