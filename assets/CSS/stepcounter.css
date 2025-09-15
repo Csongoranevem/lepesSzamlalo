@@ -58,6 +58,14 @@ footer{
     border-bottom: 1px solid white;
 }
 
+#profileOldPasswordField /*#profilePasswordField*/{
+    border: 1px solid var(--bs-secondary);
+}
+
+#profilePasswordField{
+    width: min-content;
+}
+
 
 .changeBTN{
     display: inline;
@@ -65,6 +73,7 @@ footer{
     width: fit-content;
     height: fit-content;
     transition: 0.3s;
+    margin: 5px;
 }
 
 .chanfeBTN:hover{

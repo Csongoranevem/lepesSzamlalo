@@ -80,6 +80,9 @@ async function Render(view) {
     if (view == 'profile') {
         ProfileDataFill();
     }
+    else if (view == 'main') {
+        setdate()
+    }
 }
 
 

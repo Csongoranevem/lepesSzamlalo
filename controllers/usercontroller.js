@@ -132,6 +132,8 @@ async function login() {
         ShowMessages('danger', 'Sikertelen bejelentkezés', `${err}`)
 
     }
+
+    Render('main')
 }
 
 
@@ -164,15 +166,20 @@ else{
 // Profil adatok betöltése a profil nézetben
 
 function ProfileDataFill() {
-    loggedUser = JSON.parse(sessionStorage.getItem('loggedUser'))
+    try {
+        loggedUser = JSON.parse(sessionStorage.getItem('loggedUser'))
 
-    if (!loggedUser) {
-        return ShowMessages('danger', 'Hiba', 'Nincs bejelentkezve felhasználó')
+        if (!loggedUser) {
+            return ShowMessages('danger', 'Hiba', 'Nincs bejelentkezve felhasználó')
+        }
+    
+        document.getElementById('profileNameField').value = loggedUser.name
+        document.getElementById('profileEmailField').value = loggedUser.email
+        document.getElementById('profilePasswordField').value = loggedUser.password
+    
+    } catch (err) {
+        ShowMessages('danger', 'Hiba', `Sikertelen adatlekérés \n ${err}`)
     }
-
-    document.getElementById('profileNameField').value = loggedUser.name
-    document.getElementById('profileEmailField').value = loggedUser.email
-    document.getElementById('profilePasswordField').value = loggedUser.password
 }
 
 function ChangeData(element) {
@@ -180,8 +187,8 @@ function ChangeData(element) {
     document.getElementById('saveProfileBTN').classList.remove('d-none')
     dataToChange = document.getElementById(`profile${element}Field`)
     if (dataToChange.id == 'profilePasswordField') {
-        document.getElementById('profileOldPasswordField').classList.remove('d-none')
         document.getElementById('profileOldPasswordField').setAttribute('required', true)
+
     }
     dataToChange.removeAttribute('readonly')
     dataToChange.classList.remove('bg-light')
@@ -197,8 +204,10 @@ async function UpdateProfile() {
         let profileUserPassword = document.querySelector('#profilePasswordField')
         let profileOldPassword = document.querySelector('#profileOldPasswordField')
 
-        if (profileUserEmail.value.trim() == '' || profileUserName.value.trim() == '' || profileUserPassword.value.trim() == '' || profileOldPassword.value.trim() == '') {
-            ShowMessages('danger', 'Hiba', 'Kitöltetlen adatok')
+
+
+        if (profileUserEmail.value.trim() == '' || profileUserName.value.trim() == '' || profileUserPassword.value.trim() == '' || profileOldPassword.value == "") {
+            ShowMessages('danger', 'Hiba', 'Kitöltetlen adatok vagy hibás jelszó')
             return
         }
         else if (!regexMail.test(profileUserEmail.value)) {
@@ -209,11 +218,28 @@ async function UpdateProfile() {
             ShowMessages('danger', 'Hiba', 'A jelszónak legalább 8 karakter hosszúnak kell lennie, tartalmaznia kell legalább egy nagybetűt, egy kisbetűt és egy számot.')
             return
         }
-        else if (profileOldPassword.value != loggedUser.password) {
+
+        else if (profileOldPassword.value == '' || profileOldPassword.value == null || profileOldPassword.value != loggedUser.password) {
             ShowMessages('danger', 'Hiba', 'Hibás jelszó')
             return
         }
 
+        /*else if (profileUserEmail.value != loggedUser.email){
+            const res = await fetch(`${serverURL}/users/registration`, {
+                method: "POST",
+                headers: 
+                {
+                    'Content-Type': 'application/json'
+                }, 
+                body: JSON.stringify({
+                    email: useremail.value,
+                })
+            })  
+            
+            if (res.status != 200) {
+                ShowMessages('warning', 'Hiba', 'Hiba')
+            }
+        }*/
 
 
        const res = await fetch(`${serverURL}/users/${loggedUser.id}`, {
@@ -237,7 +263,6 @@ async function UpdateProfile() {
             document.getElementById('profileEmailField').setAttribute('readonly', true)
             document.getElementById('profilePasswordField').setAttribute('readonly', true)
 
-            document.getElementById('profileOldPasswordField').classList.add('d-none')
             document.getElementById('profileOldPasswordField').value = ''
 
 
@@ -264,3 +289,5 @@ async function UpdateProfile() {
         
     }
 }
+
+

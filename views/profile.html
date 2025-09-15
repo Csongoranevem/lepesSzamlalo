@@ -36,8 +36,9 @@
                 <p class="mb-0">Password</p>
               </div>
               <div class="col-sm-9">
-                <input type="password" class="d-inline text-muted mb-0 d-none" id="profileOldPasswordField" placeholder="Current password"></input>
-                <input type="password" class="d-inline text-muted mb-0" id="profilePasswordField" readonly></input>
+                <label for="profileOldPasswordField">Változtatáshoz írd be a jelszavad:</label>
+                <input type="password" class="d-inline text-muted mb-0" id="profileOldPasswordField" placeholder="Current password"></input>
+                <input type="password" class="d-inline text-muted mb-0" id="profilePasswordField" placeholder="New password" readonly></input>
                 <button class="d-inline btn btn-secondary changeBTN" onclick="ChangeData('Password')">Change</button>
               </div>
             </div>
