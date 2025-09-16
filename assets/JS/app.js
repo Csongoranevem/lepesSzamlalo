@@ -6,7 +6,6 @@ const company = "Bajai SZC Türr István Technikum"
 let defaultMenu = document.getElementById('defaultMenu')
 let loggedMenu = document.getElementById('loggedMenu')
 
-
 appTitleLBL = document.querySelector('footer h6')
 appTitleLBL.textContent = company
 authorLBL = document.querySelector('footer > p')
@@ -82,6 +81,12 @@ async function Render(view) {
     }
     else if (view == 'main') {
         setdate()
+        await TablaFeltoltes()
+    }
+
+    else if (view == 'statistics') {
+        getChartdata()
+        initChart()
     }
 }
 
