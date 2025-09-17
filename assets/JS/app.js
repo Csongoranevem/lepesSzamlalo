@@ -85,8 +85,13 @@ async function Render(view) {
     }
 
     else if (view == 'statistics') {
-        getChartdata()
+        await getChartdata(loggedUser.id)
         initChart()
+    }
+
+    else if (view == 'calendar') {
+        await getCalendar(loggedUser.id)
+        initCalendar()
     }
 }
 

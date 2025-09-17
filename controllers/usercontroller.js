@@ -120,20 +120,21 @@ async function login() {
             ShowMessages('success', '', 'Sikeres bejelentkezés!')
             sessionStorage.setItem('loggedUser', JSON.stringify(loggedUser))
             getloggedUser()
+            Render('main')
             return
+
 }
 
         
         ShowMessages('warning', 'Hiba', 'Sikertelen bejelentkezés!')
 
-        
+
 
     } catch (err) {
         ShowMessages('danger', 'Sikertelen bejelentkezés', `${err}`)
 
     }
 
-    Render('main')
 }
 
 
@@ -156,10 +157,7 @@ function dataChange(params) {
     
 }
 
-if (getloggedUser()) {
-    Render('main')
-}
-else{
+if (!getloggedUser()) {
     Render('login')
 }
 

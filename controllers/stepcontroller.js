@@ -5,7 +5,6 @@ let lepesID = document.getElementById('sID')
 let editMode = false
 let dateField = document.getElementById('dateField')
 let countField = document.getElementById('countField')
-document.getElementById('hozzaadBTN').addEventListener('click', Hozzaadas())
 let selectedStepData;
 
 function setdate() {
@@ -34,6 +33,7 @@ async function Hozzaadas() {
     }
 
     await azonosDatum()
+    await Render('main')
 
 
 }
@@ -46,7 +46,7 @@ async function TablaFeltoltes() {
         let tbody = document.getElementById('stepDataTable')
 
 
-        const res = await fetch(`${serverURL}/stepdataFill/${loggedUser.id}`)
+        const res = await fetch(`${serverURL}/stepdata/Fill/${loggedUser.id}`)
 
         stepsData =  await res.json()
         
@@ -84,13 +84,13 @@ async function TablaFeltoltes() {
 
 
     stepsData.forEach(e => {
-        SUM += e.stepCount
+        SUM += Number(e.stepCount)
         document.getElementById('osszLepes').innerText = Number(SUM)
     });
 
 
     } catch (err) {
-        alert(err)
+        ShowMessages('danger', 'Hiba', 'Hiba történt a táblázat betöltése során! \n', err)
     }
 
 
@@ -105,7 +105,7 @@ async function Delete(id) {
 
     try {
 
-        const res = await fetch(`${serverURL}/stepdataDelete/${id}`, {
+        const res = await fetch(`${serverURL}/stepdata/Delete/${id}`, {
             method: "DELETE",
             headers: { 'Content-Type': 'application/json' }
     })
@@ -135,7 +135,7 @@ async function Update(id) {
 
     try {
 
-        const res = await fetch(`${serverURL}/stepdataUpdate/${id}`, {
+        const res = await fetch(`${serverURL}/stepdata/Update/${id}`, {
             method: "PATCH",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -263,7 +263,7 @@ async function update() {
 
         try {
 
-            const res = await fetch(`${serverURL}/stepdataUpdate/${selectedStepData.id}`, {
+            const res = await fetch(`${serverURL}/stepdata/Update/${selectedStepData.id}`, {
                 method: "PATCH",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

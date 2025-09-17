@@ -2,10 +2,15 @@ let chart = null;
 let chartLabels = []
 let chartData = []
 
-async function getChartdata() {
+async function getChartdata(id) {
+
+    let res = await fetch(`http://localhost:3000/steps/chartdata/${id}`, {
+
     // lekérdezi a szükséges adatokat az API-ból
     // feltölti a label[] és data[] tömböket
+})
 }
+
 
 
 function initChart(){
